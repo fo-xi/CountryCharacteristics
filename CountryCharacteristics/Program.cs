@@ -36,7 +36,11 @@ namespace CountryCharacteristics
 
 			double[,] result = CalculatingDistance(сountrysDist, grossNationalProductsDist,
 				debtsDist, populationDensityDist);
-			DisplayMatrix(result);
+
+
+			Sorting(grossNationalProducts, сountrys, result);
+			
+			Console.ReadKey();
 		}
 
 		static void DisplayTable(string[] сountrys, string[] continents,
@@ -133,6 +137,46 @@ namespace CountryCharacteristics
 			}
 			DisplayMatrix(results);
 			return results;
+		}
+
+		static void Sorting(double[] grossNationalProducts, string[] сountrys, double[,] result)
+		{
+			int index = 0;
+			for (int i = 0; i < count; i++)
+			{
+				if (grossNationalProducts[i] < grossNationalProducts[index])
+				{
+					index = i;
+				}
+			}
+
+			double[] auxiliaryArray = new double[count];
+			for (int i = 0; i < count; i++)
+			{
+				auxiliaryArray[i] = result[index, i];
+			}
+
+			for (int i = 0; i < auxiliaryArray.Length - 1; i++)
+			{
+				for (int j = i + 1; j < auxiliaryArray.Length; j++)
+				{
+					if (auxiliaryArray[i] > auxiliaryArray[j])
+					{
+						string tempString = сountrys[i];
+						double temp = auxiliaryArray[i];
+						auxiliaryArray[i] = auxiliaryArray[j];
+						сountrys[i] = сountrys[j];
+						auxiliaryArray[j] = temp;
+						сountrys[j] = tempString;
+					}
+				}
+			}
+
+			Console.WriteLine("Вывод отсортированного массива");
+			for (int i = 0; i < сountrys.Length; i++)
+			{
+				Console.WriteLine(сountrys[i]);
+			}
 		}
 	}
 }
