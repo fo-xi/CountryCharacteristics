@@ -172,7 +172,7 @@ namespace CountryCharacteristics
 				}
 			}
 
-			Console.WriteLine("Вывод отсортированного массива");
+			Console.WriteLine("Вывод отсортированных стран");
 			for (int i = 0; i < сountrys.Length; i++)
 			{
 				Console.WriteLine(сountrys[i]);
