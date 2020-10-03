@@ -17,11 +17,12 @@ namespace RestingPlace
 			{
 				{9, 3, 9, 3, 10, 4, 2, 3, 7, 5},
 				{5, 1, 10, 10, 5, 5, 4, 10, 4, 2},
-				{6, 3, 7, 8, 3, 2, 3, 4, 5, 6},
+				{5, 3, 7, 8, 3, 2, 3, 4, 5, 6},
 				{7, 6, 10, 7, 9, 5, 5, 9, 1, 2},
 				{10, 9, 9, 3, 6, 1, 5, 4, 2, 2}
 			};
 			DisplayMatrix(matrix);
+			Ranging(matrix);
 			Console.ReadKey();
 		}
 
@@ -54,36 +55,59 @@ namespace RestingPlace
 		{
 			double[] sum = new double[colums];
 			double[] generalizedRank = new double[colums];
-
 			for (int i = 0; i < colums; i++)
 			{
 				for (int j = 0; j < rows; j++)
 				{
+					int count = 0;
+					for (int k = 0; k < rows; k++)
+					{
+						if (j != k && matrix[k, i] == matrix[j, i])
+						{
+							count++;
+							if (count >= 2)
+							{
+								double number = matrix[k, i];
+								generalizedRank[i] = number;
+							}
+
+						}
+					}
 					sum[i] = sum[i] + matrix[j, i];
-					generalizedRank[i] = sum[i] / rows;
+					if (generalizedRank[i] == 0)
+					{
+						generalizedRank[i] = sum[i] / rows;
+					}
 				}
 			}
-			DisplayArray(sum);
 			DisplayArray(generalizedRank);
 		}
 
-		static void Ranging2(double[,] matrix)
+		static void pairComparison(double[,] matrix)
 		{
-			for (int i = 0; i < rows; i++)
+			int result;
+			for (int i = 0; i < colums; i++)
 			{
-				for (int j = 0; j < colums; j++)
+				for (int j = 0; j < rows; j++)
 				{
-					for (int k = 0; k < colums; k++)
+					for (int k = 0; k < rows; k++)
 					{
-						if (matrix[i, j] == matrix[i, k])
+						if (matrix[j, i] > matrix[k, i])
 						{
-
+							result = 1;
+						}
+						else if (matrix[j, i] == matrix[k, i])
+						{
+							result = 0;
+						}
+						else
+						{
+							result = -1;
 						}
 					}
 				}
 			}
-			DisplayArray(sum);
-			DisplayArray(generalizedRank);
 		}
+
 	}
 }
