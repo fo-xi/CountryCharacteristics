@@ -66,5 +66,24 @@ namespace RestingPlace
 			DisplayArray(sum);
 			DisplayArray(generalizedRank);
 		}
+
+		static void Ranging2(double[,] matrix)
+		{
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < colums; j++)
+				{
+					for (int k = 0; k < colums; k++)
+					{
+						if (matrix[i, j] == matrix[i, k])
+						{
+
+						}
+					}
+				}
+			}
+			DisplayArray(sum);
+			DisplayArray(generalizedRank);
+		}
 	}
 }
