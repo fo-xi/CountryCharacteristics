@@ -37,6 +37,7 @@ namespace RestingPlace
 			//};
 			//DisplayMatrix(matrix);
 			Ranging(matrix1, comparativeArray);
+			PairComparison(matrix1);
 			//Ranging(matrix);
 			Console.ReadKey();
 		}
@@ -66,9 +67,9 @@ namespace RestingPlace
 			Console.WriteLine();
 		}
 
-		static double[] GetRow(double[,] matrix, int rowNumber)
+		static T[] GetRow<T>(T[,] matrix, int rowNumber)
 		{
-			double[] arrayString = new double[colums];
+			T[] arrayString = new T[colums];
 			for (int j = 0; j < rows; j++)
 			{
 				arrayString[j] = matrix[rowNumber, j];
@@ -141,56 +142,41 @@ namespace RestingPlace
 			DisplayArray(generalizedRank);
 		}
 
-		static void pairComparison(double[,] matrix)
+		static void PairComparison(string[,] matrix)
 		{
-			for (int i = 0; i < colums; i++)
+			int[,] resultMatrix = new int[rows, colums];
+			string[] rowString = GetRow(matrix, rows);
+
+			double[] resultRowString = new double[colums];
+			for (int i = 0; i < rows; i++)
 			{
-				var expert = GetRow(matrix, rows);
-				for (int j = 0; j < rows; j++)
+				for (int index = 0; index < rowString.Length; index++)
 				{
-					for (int k = 0; k < rows; k++)
+					for (int j = 0; j < colums; j++)
 					{
-						
+						if (matrix[i, j] == rowString[index])
+						{
+							resultMatrix[i, index] = j + 1;
+						}
 					}
 				}
 			}
-			for (int i = 0; i < rows; i++)
+
+			for (int i = 0; i < colums; i++)
 			{
-				var expert = GetRow(matrix, rows);
-				for (int j = 0; j < colums; j++)
+				for (int j = 0; j < rows; j++)
 				{
-					if ()
+					if (resultMatrix[i] >= resultMatrix[j])
+					{
+						resultMatrix[i, j] = 1;
+					}
+					else
+					{
+						resultMatrix[i, j] = 0;
+					}
 				}
 			}
+			DisplayMatrix(resultMatrix);
 		}
-
-		
-
-		//static void pairComparison(double[,] matrix)
-		//{
-		//	int result;
-		//	for (int i = 0; i < colums; i++)
-		//	{
-		//		for (int j = 0; j < rows; j++)
-		//		{
-		//			for (int k = 0; k < rows; k++)
-		//			{
-		//				if (matrix[j, i] > matrix[k, i])
-		//				{
-		//					result = 1;
-		//				}
-		//				else if (matrix[j, i] == matrix[k, i])
-		//				{
-		//					result = 0;
-		//				}
-		//				else
-		//				{
-		//					result = -1;
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
-
 	}
 }
