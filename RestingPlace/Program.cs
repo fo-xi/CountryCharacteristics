@@ -122,10 +122,10 @@ namespace RestingPlace
 		{
 			for (int i = 0; i < size; i++)
 			{
-				Console.Write($"{array[i]}\t");
+				Console.Write($"A{i + 1} = {array[i]}\t");
 			}
 
-			Console.WriteLine();
+			Console.WriteLine() ;
 		}
 
 		static T[] GetRow<T>(T[,] matrix, int rowNumber)
@@ -136,6 +136,19 @@ namespace RestingPlace
 				arrayString[j] = matrix[rowNumber, j];
 			}
 			return arrayString;
+		}
+
+		static double GetMaxValue(double[] array)
+		{
+			double max = array[0];
+			for (int i = 0; i < sizeChoosingVacationSpot; i++)
+			{
+				if (array[i] > max)
+				{
+					max = array[i];
+				}
+			}
+			return max;
 		}
 
 		static void Ranging(string[,] matrix, string[] comparativeArray)
@@ -411,8 +424,8 @@ namespace RestingPlace
 			double[] resultArray = new double[sizeChoosingVacationSpot];
 			for (int i = 0; i < sizeChoosingVacationSpot; i++)
 			{
-				resultArray[i] = Math.Round(Math.Pow((array1[i] + array2[i] + 
-					array3[i] + array4[i]), 1.0 / sizeChoosingVacationSpot), 3);
+				resultArray[i] = Math.Round(Math.Pow((array1[i] * array2[i] * 
+					array3[i] * array4[i]), 1.0 / sizeChoosingVacationSpot), 3);
 			}
 			Console.WriteLine("Значения интегрального критерия " +
 				"по методу мультипликативной свертки");
@@ -421,9 +434,9 @@ namespace RestingPlace
 			double[] resultArrayWeight = new double[sizeChoosingVacationSpot];
 			for (int i = 0; i < sizeChoosingVacationSpot; i++)
 			{
-				resultArrayWeight[i] = Math.Round(Math.Pow(array1[i], weight[i]) + 
-					Math.Pow(array2[i], weight[i]) + 
-					Math.Pow(array3[i], weight[i]) + 
+				resultArrayWeight[i] = Math.Round(Math.Pow(array1[i], weight[i]) * 
+					Math.Pow(array2[i], weight[i]) *
+					Math.Pow(array3[i], weight[i]) * 
 					Math.Pow(array4[i], weight[i]), 3);
 			}
 			Console.WriteLine("Значения интегрального критерия " +
@@ -436,16 +449,21 @@ namespace RestingPlace
         {
 			double[] resultArray = new double[sizeChoosingVacationSpot];
 			//Шкалы отношений
+
+			double maxValueArray1 = GetMaxValue(array1);
+			double maxValueArray2 = GetMaxValue(array1);
+
 			for (int i = 0; i < 2; i++)
 			{
-				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((50 - array1[i]), 2)) +
-					(Math.Pow((40 - array2[i]), 2))), 1.0 / 2.0)) / sizeChoosingVacationSpot, 3);
+				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((maxValueArray1 - array1[i]), 2)) +
+					(Math.Pow((maxValueArray2 - array2[i]), 2))) 
+					/ sizeChoosingVacationSpot, 1.0 / 2)), 3);
 			}
 			//Ранговые шкалы
 			for (int i = 2; i < 4; i++)
 			{
 				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((1 - array3[i]), 2)) +
-					(Math.Pow((1 - array4[i]), 2))), 1.0 / 2.0)) / sizeChoosingVacationSpot, 3);
+					(Math.Pow((1 - array4[i]), 2))), 1.0 / 2)) / sizeChoosingVacationSpot, 3);
 			}
 			Console.WriteLine("Значения интегрального критерия " +
 				"по методу идеальной точки");
@@ -455,14 +473,14 @@ namespace RestingPlace
 			//Шкалы отношений
 			for (int i = 0; i < 2; i++)
 			{
-				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((50 - array1[i]), 2))) +
-					(weight[i] * (Math.Pow((50 - array2[i]), 2)))), 1.0 / 2.0), 3);
+				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((maxValueArray1 - array1[i]), 2))) +
+					(weight[i] * (Math.Pow((maxValueArray2 - array2[i]), 2)))), 1.0 / 2), 3);
 			}
 			//Ранговые шкалы
 			for (int i = 2; i < 4; i++)
 			{
 				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((1 - array3[i]), 2))) +
-					(weight[i] * (Math.Pow((1 - array4[i]), 2)))), 1.0 / 2.0), 3);
+					(weight[i] * (Math.Pow((1 - array4[i]), 2)))), 1.0 / 2), 3);
 			}
 			Console.WriteLine("Значения интегрального критерия " +
 				"по методу идеальной точки (вес)");
