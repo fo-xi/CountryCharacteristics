@@ -66,9 +66,19 @@ namespace RestingPlace
 			Console.WriteLine();
 		}
 
+		static double[] GetRow(double[,] matrix, int rowNumber)
+		{
+			double[] arrayString = new double[colums];
+			for (int j = 0; j < rows; j++)
+			{
+				arrayString[j] = matrix[rowNumber, j];
+			}
+			return arrayString;
+		}
+
 		static void Ranging(string[,] matrix, string[] comparativeArray)
 		{
-			int[,] resultMatrix = new int[rows, colums];
+			double[,] resultMatrix = new double[rows, colums];
 			for (int i = 0; i < rows; i++)
 			{
 				for (int index = 0; index < comparativeArray.Length; index++)
@@ -133,7 +143,25 @@ namespace RestingPlace
 
 		static void pairComparison(double[,] matrix)
 		{
-
+			for (int i = 0; i < colums; i++)
+			{
+				var expert = GetRow(matrix, rows);
+				for (int j = 0; j < rows; j++)
+				{
+					for (int k = 0; k < rows; k++)
+					{
+						
+					}
+				}
+			}
+			for (int i = 0; i < rows; i++)
+			{
+				var expert = GetRow(matrix, rows);
+				for (int j = 0; j < colums; j++)
+				{
+					if ()
+				}
+			}
 		}
 
 		
