@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Runtime.Serialization.Formatters;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestingPlace
@@ -11,7 +13,8 @@ namespace RestingPlace
 	{
 		const int rows = 5;
 		const int colums = 10;
-		private const int numberMostExperts = 3;
+		const int numberMostExperts = 3;
+		const int numberMatrices = 5;
 
 		static void Main(string[] args)
 		{
@@ -161,7 +164,6 @@ namespace RestingPlace
 
 		static void PairComparison(string[,] matrix, string[] comparativeArray)
 		{
-			int[,] resultMatrix = new int[colums, colums];
 
 			//Перевод из матрицы типа string в матрицу типа double
 			double[,] doubleMatrix = new double[rows, colums];
@@ -179,9 +181,13 @@ namespace RestingPlace
 				}
 			}
 
+			//Список матриц
+			List<int[,]> matrixList = new List<int[,]>();
+
 			//Создание матрицы парных сравнений с булевыми значениями
 			for (int i = 0; i < rows; i++)
 			{
+				int[,] resultMatrix = new int[colums, colums];
 				double[] arrayDouble = GetRow(doubleMatrix, i);
 				for (int j = 0; j < colums; j++)
 				{
@@ -198,15 +204,40 @@ namespace RestingPlace
 					}
 				}
 				DisplayMatrix(resultMatrix, colums, colums);
+				matrixList.Add(resultMatrix);
 			}
 
+			//Подсчет результирующей матрицы
+			int[,] resulBoolMatrix = new int[colums, colums];
 			for (int i = 0; i < colums; i++)
 			{
+				int numberUnits = 0;
+				int numberZeros = 0;
 				for (int j = 0; j < colums; j++)
 				{
+					foreach (var auxiliaryMatrix in matrixList)
+					{
+						if (auxiliaryMatrix[i, j] == 1)
+						{
+							numberUnits++;
+						}
+						else
+						{
+							numberZeros++;
+						}
+					}
 
+					if (numberUnits > numberZeros)
+					{
+						resulBoolMatrix[i, j] = 1;
+					}
+					else
+					{
+						resulBoolMatrix[i, j] = 0;
+					}
 				}
 			}
+			DisplayMatrix(resulBoolMatrix, colums, colums);
 		}
 	}
 }
