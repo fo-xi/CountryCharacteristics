@@ -16,13 +16,23 @@ namespace RestingPlace
 		const int colums = 10;
 		const int numberMostExperts = 3;
 		const int numberMatrices = 5;
+		const int indexColumsFlightPrice = 1;
+		const int indexColumsAccommodationPrice = 2;
+		const int indexColumsServiceLevel = 3;
+		const int indexColumsFoodQuality = 4;
+		const int rowsChoosingVacationSpot = 4;
+		const int columsChoosingVacationSpot = 4;
+
+
 
 		static void Main(string[] args)
 		{
+			//1 задание
 			string[] comparativeArray =
 			{
 				"A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"
 			};
+
 			string[,] matrix1 =
 			{
 				{"A7", "A4", "A8", "A2", "A6", "A10", "A9", "A3", "A1", "A5"},
@@ -31,6 +41,8 @@ namespace RestingPlace
 				{"A9", "A10", "A7", "A6", "A2", "A4", "A1", "A5", "A8", "A3"},
 				{"A6", "A9", "A10", "A4", "A8", "A7", "A5", "A3", "A2", "A1"}
 			};
+
+			//2 задание
 			double[,] matrix2 =
 			{
 				{9, 3, 9, 3, 10, 4, 2, 3, 7, 5},
@@ -39,10 +51,25 @@ namespace RestingPlace
 				{7, 6, 10, 7, 9, 5, 5, 9, 1, 2},
 				{10, 9, 9, 3, 6, 1, 5, 4, 2, 2}
 			};
+
 			double[] expertСompetence =
 			{
 				0.26189, 0.97753, 0.021887, 0.13493, 0.48354
 			};
+
+			//3 задание
+			double[,] matrix3 =
+			{
+				{21, 24, 2, 7},
+				{28, 30, 3, 4},
+				{25, 12, 3, 10},
+				{34, 32, 4, 8},
+			};
+			double[] weight =
+			{
+				0.3, 0.3, 0.2, 0.2
+			};
+
 			Console.WriteLine("Ранживароние");
 			Ranging(matrix1, comparativeArray);
 			Console.WriteLine();
@@ -279,6 +306,41 @@ namespace RestingPlace
 			}
 			Console.WriteLine("Вычисление обобщенной оценки с учетом компетентности экспертов");
 			DisplayArray(ElementExpertСompetence);
+		}
+
+		static void AssessingAlternatives(double[,] matrix, double[] weight)
+		{
+			double[] AdditiveConvolutionFlightPrice = new double[rowsChoosingVacationSpot];
+			for (int j = 0; j < indexColumsFlightPrice; j++)
+			{
+				int min = 15;
+				int max = 50;
+				for (int i = 0; i < rows; i++)
+				{
+					AdditiveConvolutionFlightPrice[i] = (max - matrix[i, j]) / (max - min);
+				}
+			}
+
+			double[] AdditiveConvolutionAccommodationPrice = new double[rowsChoosingVacationSpot];
+			for (int j = 0; j < indexColumsAccommodationPrice; j++)
+			{
+				int min = 20;
+				int max = 40;
+				for (int i = 0; i < rows; i++)
+				{
+					AdditiveConvolutionAccommodationPrice[i] = (max - matrix[i, j]) / (max - min);
+				}
+			}
+
+			double[] AdditiveConvolutionServiceLevel = new double[rowsChoosingVacationSpot];
+			for (int j = 0; j < indexColumsServiceLevel; j++)
+			{
+				int max = 5;
+				for (int i = 0; i < rows; i++)
+				{
+					AdditiveConvolutionServiceLevel[i] = max / matrix[i, j];
+				}
+			}
 		}
 	}
 }
