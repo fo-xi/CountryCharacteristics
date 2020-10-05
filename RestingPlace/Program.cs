@@ -11,6 +11,7 @@ namespace RestingPlace
 	{
 		const int rows = 5;
 		const int colums = 10;
+		private const int numberMostExperts = 3;
 
 		static void Main(string[] args)
 		{
@@ -81,41 +82,61 @@ namespace RestingPlace
 					}
 				}
 			}
+
 			DisplayMatrix(resultMatrix);
+
+			//Сумма элемнтов столбца
+			double[] sum = new double[colums];
+			for (int i = 0; i < colums; i++)
+			{
+				for (int j = 0; j < rows; j++)
+				{
+					sum[i] = sum[i] + resultMatrix[j, i];
+				}
+			}
+			Console.WriteLine("Сумма рангов");
+			DisplayArray(sum);
+
+			double[] generalizedRank = new double[colums];
+			for (int i = 0; i < colums; i++)
+			{
+				for (int j = 0; j < rows; j++)
+				{
+					int count = 0;
+					for (int k = 0; k < rows; k++)
+					{
+						if (resultMatrix[k, i] == resultMatrix[j, i])
+						{
+							count++;
+							if (count >= numberMostExperts)
+							{
+								generalizedRank[i] = resultMatrix[k, i];
+
+							}
+						}
+					}
+				}
+			}
+
+			//Среднее значение суммы элементов столбцы
+			for (int i = 0; i < colums; i++)
+			{
+				if (generalizedRank[i] == 0)
+				{ 
+					generalizedRank[i] = sum[i] / rows;
+				}
+			}
+
+			Console.WriteLine("Обобщенный ранг");
+			DisplayArray(generalizedRank);
 		}
 
-		//static void Ranging(double[,] matrix)
-		//{
-		//	double[] sum = new double[colums];
-		//	double[] generalizedRank = new double[colums];
-		//	for (int i = 0; i < colums; i++)
-		//	{
-		//		for (int j = 0; j < rows; j++)
-		//		{
-		//			int count = 0;
-		//			for (int k = 0; k < rows; k++)
-		//			{
-		//				if (j != k && matrix[k, i] == matrix[j, i])
-		//				{
-		//					count++;
-		//					if (count >= 2)
-		//					{
-		//						double number = matrix[k, i];
-		//						generalizedRank[i] = number;
-		//					}
+		static void pairComparison(double[,] matrix)
+		{
 
-		//				}
-		//			}
-		//			sum[i] = sum[i] + matrix[j, i];
-		//			if (generalizedRank[i] == 0)
-		//			{
-		//				generalizedRank[i] = sum[i] / rows;
-		//			}
-		//		}
-		//	}
-		//	DisplayArray(sum);
-		//	DisplayArray(generalizedRank);
-		//}
+		}
+
+		
 
 		//static void pairComparison(double[,] matrix)
 		//{
