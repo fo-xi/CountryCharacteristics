@@ -73,8 +73,13 @@ namespace RestingPlace
 			Console.WriteLine();
 			Console.WriteLine("Парное сравнение");
 			PairComparison(matrix1, comparativeArray);
+			Console.WriteLine("===============================");
+			Console.WriteLine("Матрица ко второму заданию");
 			DisplayMatrix(matrix2);
 			DirectAssessment(matrix2, expertСompetence);
+			Console.WriteLine("===============================");
+			Console.WriteLine("Матрица к третьему заданию");
+			DisplayMatrix(matrix3, sizeChoosingVacationSpot, sizeChoosingVacationSpot);
 			AssessingAlternatives(matrix3, weight);
 			Console.ReadKey();
 		}
@@ -124,8 +129,7 @@ namespace RestingPlace
 			{
 				Console.Write($"A{i + 1} = {array[i]}\t");
 			}
-
-			Console.WriteLine() ;
+			Console.WriteLine();
 		}
 
 		static T[] GetRow<T>(T[,] matrix, int rowNumber)
@@ -136,19 +140,6 @@ namespace RestingPlace
 				arrayString[j] = matrix[rowNumber, j];
 			}
 			return arrayString;
-		}
-
-		static double GetMaxValue(double[] array)
-		{
-			double max = array[0];
-			for (int i = 0; i < sizeChoosingVacationSpot; i++)
-			{
-				if (array[i] > max)
-				{
-					max = array[i];
-				}
-			}
-			return max;
 		}
 
 		static void Ranging(string[,] matrix, string[] comparativeArray)
@@ -382,14 +373,20 @@ namespace RestingPlace
 			Console.WriteLine("Нормированные значения критерия 'Качество питания'");
 			DisplayArray(foodQuality, sizeChoosingVacationSpot);
 
+			Console.WriteLine();
+
+			Console.WriteLine("===============================");
 			AdditiveConvolution(flightPrice, accommodationPrice, 
 				serviceLevel, foodQuality, weight);
+			Console.WriteLine("===============================");
 
 			MultiplicativeConvolution(flightPrice, accommodationPrice,
 				serviceLevel, foodQuality, weight);
+			Console.WriteLine("===============================");
 
 			IdealPoint(flightPrice, accommodationPrice,
 				serviceLevel, foodQuality, weight);
+			Console.WriteLine("===============================");
 		}
 
 		static void AdditiveConvolution(double[] array1, double[] array2, 
@@ -416,6 +413,20 @@ namespace RestingPlace
 			Console.WriteLine("Значения интегрального критерия " +
 				"по методу аддитивной свертки(вес)");
 			DisplayArray(resultArrayWeight, sizeChoosingVacationSpot);
+
+			//Вывод наилучшего значения
+			Console.WriteLine();
+			double maxValue = resultArray.Max();
+			double indexMaxValue = Array.IndexOf(resultArray, maxValue);
+			Console.WriteLine($"Наилучшее значение по методу " +
+				$"аддитивной свертки оказалось место отдыха A{indexMaxValue + 1} = {maxValue}");
+
+			maxValue = resultArrayWeight.Max();
+			indexMaxValue = Array.IndexOf(resultArrayWeight, maxValue);
+            Console.WriteLine($"Наилучшее значение по методу " +
+                $"аддитивной свертки (с учетом веса) оказалось " +
+                $"место отдыха A{indexMaxValue + 1} = {maxValue}");
+			Console.WriteLine();
 		}
 
 		static void MultiplicativeConvolution(double[] array1, double[] array2,
@@ -442,16 +453,30 @@ namespace RestingPlace
 			Console.WriteLine("Значения интегрального критерия " +
 				"по методу мультипликативной свертки(вес)");
 			DisplayArray(resultArrayWeight, sizeChoosingVacationSpot);
+
+			//Вывод наилучшего значения
+			Console.WriteLine();
+			double maxValue = resultArray.Max();
+			double indexMaxValue = Array.IndexOf(resultArray, maxValue);
+			Console.WriteLine($"Наилучшее значение по методу " +
+				$"аддитивной свертки оказалось место отдыха A{indexMaxValue + 1} = {maxValue}");
+
+			maxValue = resultArrayWeight.Max();
+			indexMaxValue = Array.IndexOf(resultArrayWeight, maxValue);
+			Console.WriteLine($"Наилучшее значение по методу " +
+				$"аддитивной свертки (с учетом веса) оказалось " +
+				$"место отдыха A{indexMaxValue + 1} = {maxValue}");
+			Console.WriteLine();
 		}
 
 		static void IdealPoint(double[] array1, double[] array2,
 			double[] array3, double[] array4, double[] weight)
         {
 			double[] resultArray = new double[sizeChoosingVacationSpot];
-			//Шкалы отношений
 
-			double maxValueArray1 = GetMaxValue(array1);
-			double maxValueArray2 = GetMaxValue(array1);
+			//Шкалы отношений
+			double maxValueArray1 = array1.Max();
+			double maxValueArray2 = array2.Max();
 
 			for (int i = 0; i < 2; i++)
 			{
@@ -486,6 +511,19 @@ namespace RestingPlace
 				"по методу идеальной точки (вес)");
 			DisplayArray(resultArrayWeight, sizeChoosingVacationSpot);
 
+			//Вывод наилучшего значения
+			Console.WriteLine();
+			double maxValue = resultArray.Max();
+			double indexMaxValue = Array.IndexOf(resultArray, maxValue);
+			Console.WriteLine($"Наилучшее значение по методу " +
+				$"аддитивной свертки оказалось место отдыха A{indexMaxValue + 1} = {maxValue}");
+
+			maxValue = resultArrayWeight.Max();
+			indexMaxValue = Array.IndexOf(resultArrayWeight, maxValue);
+			Console.WriteLine($"Наилучшее значение по методу " +
+				$"аддитивной свертки (с учетом веса) оказалось " +
+				$"место отдыха A{indexMaxValue + 1} = {maxValue}");
+			Console.WriteLine();
 		}
 	}
 }
