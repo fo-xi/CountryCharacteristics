@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
@@ -30,19 +31,25 @@ namespace RestingPlace
 				{"A9", "A10", "A7", "A6", "A2", "A4", "A1", "A5", "A8", "A3"},
 				{"A6", "A9", "A10", "A4", "A8", "A7", "A5", "A3", "A2", "A1"}
 			};
-			//double[,] matrix =
-			//{
-			//	{9, 3, 9, 3, 10, 4, 2, 3, 7, 5},
-			//	{5, 1, 10, 10, 5, 5, 4, 10, 4, 2},
-			//	{5, 3, 7, 8, 3, 2, 3, 4, 5, 6},
-			//	{7, 6, 10, 7, 9, 5, 5, 9, 1, 2},
-			//	{10, 9, 9, 3, 6, 1, 5, 4, 2, 2}
-			//};
-			//DisplayMatrix(matrix);
+			double[,] matrix2 =
+			{
+				{9, 3, 9, 3, 10, 4, 2, 3, 7, 5},
+				{5, 1, 10, 10, 5, 5, 4, 10, 4, 2},
+				{5, 3, 7, 8, 3, 2, 3, 4, 5, 6},
+				{7, 6, 10, 7, 9, 5, 5, 9, 1, 2},
+				{10, 9, 9, 3, 6, 1, 5, 4, 2, 2}
+			};
+			double[] expertСompetence =
+			{
+				0.26189, 0.97753, 0.021887, 0.13493, 0.48354
+			};
+			Console.WriteLine("Ранживароние");
 			Ranging(matrix1, comparativeArray);
 			Console.WriteLine();
+			Console.WriteLine("Парное сравнение");
 			PairComparison(matrix1, comparativeArray);
-			//Ranging(matrix);
+			DisplayMatrix(matrix2);
+			DirectAssessment(matrix2, expertСompetence);
 			Console.ReadKey();
 		}
 
@@ -238,6 +245,40 @@ namespace RestingPlace
 				}
 			}
 			DisplayMatrix(resulBoolMatrix, colums, colums);
+		}
+
+		static void DirectAssessment(double[,] matrix, double[] expertСompetence)
+		{
+			//Сумма элемнтов столбца
+			double[] sum = new double[colums];
+			for (int i = 0; i < colums; i++)
+			{
+				for (int j = 0; j < rows; j++)
+				{
+					sum[i] = sum[i] + matrix[j, i];
+				}
+			}
+
+			//Вычисление обобщенной оценки
+			double[] resultArray = new double[colums];
+			for (int i = 0; i < colums; i++)
+			{
+				resultArray[i] = sum[i] / rows;
+			}
+			Console.WriteLine("Вычисление обобщенной оценки");
+			DisplayArray(resultArray);
+
+			//Вычисление обобщенной оценки с учетом компетентности экспертов
+			double[] ElementExpertСompetence = new double[colums];
+			for (int i = 0; i < colums; i++)
+			{
+				for (int j = 0; j < rows; j++)
+				{
+					ElementExpertСompetence[i] += Math.Round(matrix[j, i] * expertСompetence[j], 1);
+				}
+			}
+			Console.WriteLine("Вычисление обобщенной оценки с учетом компетентности экспертов");
+			DisplayArray(ElementExpertСompetence);
 		}
 	}
 }
