@@ -37,6 +37,8 @@ namespace RestingPlace
 			//};
 			//DisplayMatrix(matrix);
 			Ranging(matrix1, comparativeArray);
+			Console.WriteLine();
+			PairComparison(matrix1, comparativeArray);
 			//Ranging(matrix);
 			Console.ReadKey();
 		}
@@ -56,6 +58,20 @@ namespace RestingPlace
 			Console.WriteLine();
 		}
 
+		static void DisplayMatrix<T>(T[,] matrix, int rows, int colums)
+		{
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < colums; j++)
+				{
+					Console.Write($"{matrix[i, j]}\t");
+				}
+
+				Console.WriteLine();
+			}
+			Console.WriteLine();
+		}
+
 		static void DisplayArray<T>(T[] array)
 		{
 			for (int i = 0; i < colums; i++)
@@ -66,10 +82,10 @@ namespace RestingPlace
 			Console.WriteLine();
 		}
 
-		static double[] GetRow(double[,] matrix, int rowNumber)
+		static T[] GetRow<T>(T[,] matrix, int rowNumber)
 		{
-			double[] arrayString = new double[colums];
-			for (int j = 0; j < rows; j++)
+			T[] arrayString = new T[colums];
+			for (int j = 0; j < colums; j++)
 			{
 				arrayString[j] = matrix[rowNumber, j];
 			}
@@ -78,6 +94,7 @@ namespace RestingPlace
 
 		static void Ranging(string[,] matrix, string[] comparativeArray)
 		{
+			//Перевод из матрицы типа string в матрицу типа double
 			double[,] resultMatrix = new double[rows, colums];
 			for (int i = 0; i < rows; i++)
 			{
@@ -107,6 +124,7 @@ namespace RestingPlace
 			Console.WriteLine("Сумма рангов");
 			DisplayArray(sum);
 
+			//Поиск совпадений элементов в столбце
 			double[] generalizedRank = new double[colums];
 			for (int i = 0; i < colums; i++)
 			{
@@ -141,56 +159,54 @@ namespace RestingPlace
 			DisplayArray(generalizedRank);
 		}
 
-		static void pairComparison(double[,] matrix)
+		static void PairComparison(string[,] matrix, string[] comparativeArray)
 		{
-			for (int i = 0; i < colums; i++)
+			int[,] resultMatrix = new int[colums, colums];
+
+			//Перевод из матрицы типа string в матрицу типа double
+			double[,] doubleMatrix = new double[rows, colums];
+			for (int i = 0; i < rows; i++)
 			{
-				var expert = GetRow(matrix, rows);
-				for (int j = 0; j < rows; j++)
+				for (int index = 0; index < comparativeArray.Length; index++)
 				{
-					for (int k = 0; k < rows; k++)
+					for (int j = 0; j < colums; j++)
 					{
-						
+						if (matrix[i, j] == comparativeArray[index])
+						{
+							doubleMatrix[i, index] = j + 1;
+						}
 					}
 				}
 			}
+
+			//Создание матрицы парных сравнений с булевыми значениями
 			for (int i = 0; i < rows; i++)
 			{
-				var expert = GetRow(matrix, rows);
+				double[] arrayDouble = GetRow(doubleMatrix, i);
 				for (int j = 0; j < colums; j++)
 				{
-					if ()
+					for (int k = 0; k < colums; k++)
+					{
+						if (arrayDouble[k] >= arrayDouble[j])
+						{
+							resultMatrix[j, k] = 1;
+						}
+						else
+						{
+							resultMatrix[j, k] = 0;
+						}
+					}
+				}
+				DisplayMatrix(resultMatrix, colums, colums);
+			}
+
+			for (int i = 0; i < colums; i++)
+			{
+				for (int j = 0; j < colums; j++)
+				{
+
 				}
 			}
 		}
-
-		
-
-		//static void pairComparison(double[,] matrix)
-		//{
-		//	int result;
-		//	for (int i = 0; i < colums; i++)
-		//	{
-		//		for (int j = 0; j < rows; j++)
-		//		{
-		//			for (int k = 0; k < rows; k++)
-		//			{
-		//				if (matrix[j, i] > matrix[k, i])
-		//				{
-		//					result = 1;
-		//				}
-		//				else if (matrix[j, i] == matrix[k, i])
-		//				{
-		//					result = 0;
-		//				}
-		//				else
-		//				{
-		//					result = -1;
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
-
 	}
 }
