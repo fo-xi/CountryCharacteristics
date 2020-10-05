@@ -15,13 +15,11 @@ namespace RestingPlace
 		const int rows = 5;
 		const int colums = 10;
 		const int numberMostExperts = 3;
-		const int numberMatrices = 5;
 		const int indexColumsFlightPrice = 1;
 		const int indexColumsAccommodationPrice = 2;
 		const int indexColumsServiceLevel = 3;
 		const int indexColumsFoodQuality = 4;
-		const int rowsChoosingVacationSpot = 4;
-		const int columsChoosingVacationSpot = 4;
+		const int sizeChoosingVacationSpot = 4;
 
 
 
@@ -77,6 +75,7 @@ namespace RestingPlace
 			PairComparison(matrix1, comparativeArray);
 			DisplayMatrix(matrix2);
 			DirectAssessment(matrix2, expertСompetence);
+			AssessingAlternatives(matrix3, weight);
 			Console.ReadKey();
 		}
 
@@ -112,6 +111,16 @@ namespace RestingPlace
 		static void DisplayArray<T>(T[] array)
 		{
 			for (int i = 0; i < colums; i++)
+			{
+				Console.Write($"{array[i]}\t");
+			}
+
+			Console.WriteLine();
+		}
+
+		static void DisplayArray<T>(T[] array, int size)
+		{
+			for (int i = 0; i < size; i++)
 			{
 				Console.Write($"{array[i]}\t");
 			}
@@ -310,37 +319,155 @@ namespace RestingPlace
 
 		static void AssessingAlternatives(double[,] matrix, double[] weight)
 		{
-			double[] AdditiveConvolutionFlightPrice = new double[rowsChoosingVacationSpot];
+			double[] flightPrice = new double[sizeChoosingVacationSpot];
 			for (int j = 0; j < indexColumsFlightPrice; j++)
 			{
 				int min = 15;
 				int max = 50;
-				for (int i = 0; i < rows; i++)
+				for (int i = 0; i < sizeChoosingVacationSpot; i++)
 				{
-					AdditiveConvolutionFlightPrice[i] = (max - matrix[i, j]) / (max - min);
+					flightPrice[i] = Math.Round((max - matrix[i, j]) / (max - min), 2);
 				}
 			}
+			Console.WriteLine("Нормированные значения критерия 'Цена перелета'");
+			DisplayArray(flightPrice, sizeChoosingVacationSpot);
 
-			double[] AdditiveConvolutionAccommodationPrice = new double[rowsChoosingVacationSpot];
+			double[] accommodationPrice = new double[sizeChoosingVacationSpot];
 			for (int j = 0; j < indexColumsAccommodationPrice; j++)
 			{
-				int min = 20;
+				int min = 10;
 				int max = 40;
-				for (int i = 0; i < rows; i++)
+				for (int i = 0; i < sizeChoosingVacationSpot; i++)
 				{
-					AdditiveConvolutionAccommodationPrice[i] = (max - matrix[i, j]) / (max - min);
+					accommodationPrice[i] = Math.Round((max - matrix[i, j]) / (max - min), 2);
 				}
 			}
+			Console.WriteLine("Нормированные значения критерия 'Цена проживания'");
+			DisplayArray(accommodationPrice, sizeChoosingVacationSpot);
 
-			double[] AdditiveConvolutionServiceLevel = new double[rowsChoosingVacationSpot];
+			double[] serviceLevel = new double[sizeChoosingVacationSpot];
 			for (int j = 0; j < indexColumsServiceLevel; j++)
 			{
 				int max = 5;
-				for (int i = 0; i < rows; i++)
+				for (int i = 0; i < sizeChoosingVacationSpot; i++)
 				{
-					AdditiveConvolutionServiceLevel[i] = max / matrix[i, j];
+					serviceLevel[i] = matrix[i, j] / max;
 				}
 			}
+			Console.WriteLine("Нормированные значения критерия 'Уровень сервиса'");
+			DisplayArray(serviceLevel, sizeChoosingVacationSpot);
+
+			double[] foodQuality = new double[sizeChoosingVacationSpot];
+			for (int j = 0; j < indexColumsFoodQuality; j++)
+			{
+				int max = 10;
+				for (int i = 0; i < sizeChoosingVacationSpot; i++)
+				{
+					foodQuality[i] = matrix[i, j] / max;
+				}
+			}
+			Console.WriteLine("Нормированные значения критерия 'Качество питания'");
+			DisplayArray(foodQuality, sizeChoosingVacationSpot);
+
+			AdditiveConvolution(flightPrice, accommodationPrice, 
+				serviceLevel, foodQuality, weight);
+
+			MultiplicativeConvolution(flightPrice, accommodationPrice,
+				serviceLevel, foodQuality, weight);
+
+			IdealPoint(flightPrice, accommodationPrice,
+				serviceLevel, foodQuality, weight);
+		}
+
+		static void AdditiveConvolution(double[] array1, double[] array2, 
+			double[] array3, double[] array4, double[] weight)
+		{
+			double[] resultArray = new double[sizeChoosingVacationSpot];
+			for (int i = 0; i < sizeChoosingVacationSpot; i++)
+			{
+				resultArray[i] = Math.Round((array1[i] + array2[i] + array3[i] + array4[i]) /
+					sizeChoosingVacationSpot, 3);
+			}
+			Console.WriteLine("Значения интегрального критерия " +
+				"по методу аддитивной свертки");
+			DisplayArray(resultArray, sizeChoosingVacationSpot);
+
+			double[] resultArrayWeight = new double[sizeChoosingVacationSpot];
+			for (int i = 0; i < sizeChoosingVacationSpot; i++)
+			{
+				resultArrayWeight[i] = Math.Round((array1[i] * weight[i]) + 
+					(array2[i] * weight[i]) + 
+					(array3[i] * weight[i]) + 
+					(array4[i] * weight[i]), 3);
+			}
+			Console.WriteLine("Значения интегрального критерия " +
+				"по методу аддитивной свертки(вес)");
+			DisplayArray(resultArrayWeight, sizeChoosingVacationSpot);
+		}
+
+		static void MultiplicativeConvolution(double[] array1, double[] array2,
+			double[] array3, double[] array4, double[] weight)
+		{
+			double[] resultArray = new double[sizeChoosingVacationSpot];
+			for (int i = 0; i < sizeChoosingVacationSpot; i++)
+			{
+				resultArray[i] = Math.Round(Math.Pow((array1[i] + array2[i] + 
+					array3[i] + array4[i]), 1.0 / sizeChoosingVacationSpot), 3);
+			}
+			Console.WriteLine("Значения интегрального критерия " +
+				"по методу мультипликативной свертки");
+			DisplayArray(resultArray, sizeChoosingVacationSpot);
+
+			double[] resultArrayWeight = new double[sizeChoosingVacationSpot];
+			for (int i = 0; i < sizeChoosingVacationSpot; i++)
+			{
+				resultArrayWeight[i] = Math.Round(Math.Pow(array1[i], weight[i]) + 
+					Math.Pow(array2[i], weight[i]) + 
+					Math.Pow(array3[i], weight[i]) + 
+					Math.Pow(array4[i], weight[i]), 3);
+			}
+			Console.WriteLine("Значения интегрального критерия " +
+				"по методу мультипликативной свертки(вес)");
+			DisplayArray(resultArrayWeight, sizeChoosingVacationSpot);
+		}
+
+		static void IdealPoint(double[] array1, double[] array2,
+			double[] array3, double[] array4, double[] weight)
+        {
+			double[] resultArray = new double[sizeChoosingVacationSpot];
+			//Шкалы отношений
+			for (int i = 0; i < 2; i++)
+			{
+				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((50 - array1[i]), 2)) +
+					(Math.Pow((40 - array2[i]), 2))), 1.0 / 2.0)) / sizeChoosingVacationSpot, 3);
+			}
+			//Ранговые шкалы
+			for (int i = 2; i < 4; i++)
+			{
+				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((1 - array3[i]), 2)) +
+					(Math.Pow((1 - array4[i]), 2))), 1.0 / 2.0)) / sizeChoosingVacationSpot, 3);
+			}
+			Console.WriteLine("Значения интегрального критерия " +
+				"по методу идеальной точки");
+			DisplayArray(resultArray, sizeChoosingVacationSpot);
+
+			double[] resultArrayWeight = new double[sizeChoosingVacationSpot];
+			//Шкалы отношений
+			for (int i = 0; i < 2; i++)
+			{
+				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((50 - array1[i]), 2))) +
+					(weight[i] * (Math.Pow((50 - array2[i]), 2)))), 1.0 / 2.0), 3);
+			}
+			//Ранговые шкалы
+			for (int i = 2; i < 4; i++)
+			{
+				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((1 - array3[i]), 2))) +
+					(weight[i] * (Math.Pow((1 - array4[i]), 2)))), 1.0 / 2.0), 3);
+			}
+			Console.WriteLine("Значения интегрального критерия " +
+				"по методу идеальной точки (вес)");
+			DisplayArray(resultArrayWeight, sizeChoosingVacationSpot);
+
 		}
 	}
 }
