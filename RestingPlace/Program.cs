@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Remoting.Messaging;
@@ -159,78 +160,64 @@ namespace RestingPlace
 					sumAuxiliaryArray[i] = sumAuxiliaryArray[i] + matrix[j, i];
 				}
 			}
+
 			Console.WriteLine("Сумма рангов");
 			DisplayArray(sumArray);
 
-			////Поиск совпадений элементов в столбце
-			//double[] generalizedRank = new double[colums];
-			//for (int i = 0; i < rows; i++)
-			//{
-			//	for (int j = 0; j < colums; j++)
-			//	{
-			//		int count = 0;
-			//		for (int k = 0; k < colums; k++)
-			//		{
-			//			if (matrix[i, k] == matrix[i, j])
-			//			{
-			//				count++;
-			//				if (count >= numberMostExperts)
-			//				{
-			//					generalizedRank[i] = matrix[k, i];
-
-			//				}
-			//			}
-			//		}
-			//	}
-			//}
-
-			Array.Sort(sumAuxiliaryArray);
+			//Запись рангов в массив
+			double minValue;
+			int indexMinValueArray;
+			int indexMinValueList;
+			List<double> tempList = new List<double>(sumArray);
+			double[] supportSumArray = sumArray.Clone() as double[];
 			double[] generalizedRank = new double[colums];
-			int count = 0;
-			for (int index = 0; index < sumArray.Length; index++)
+			for (int j = 0; j < colums; j++)
 			{
-				for (int j = 0; j < colums; j++)
+				minValue = tempList.Min();
+				indexMinValueArray = Array.IndexOf(supportSumArray, minValue);
+				indexMinValueList = tempList.IndexOf(minValue);
+				generalizedRank[indexMinValueArray] = j + 1;
+				tempList.RemoveAt(indexMinValueList);
+				supportSumArray[indexMinValueArray] = double.MaxValue;
+			}
+
+			//Посчет обощенных рангов
+			Array.Sort(sumAuxiliaryArray);
+			for (int j = 0; j < colums; j++)
+			{
+				List<int> tempIndex = new List<int>();
+				for (int k = 0; k < colums; k++)
 				{
-					if (sumArray[j] == sumAuxiliaryArray[index])
+					if (sumAuxiliaryArray[k] == sumAuxiliaryArray[j])
 					{
-						generalizedRank[index] = j + 1;
+						tempIndex.Add(k);
+					}
+				}
+
+				int sumIndex = 0;
+				foreach (var element in tempIndex)
+				{ 
+					sumIndex += element + 1;
+				}
+				double average = (double) sumIndex / tempIndex.Count;
+				generalizedRank[j] = average;
+			}
+
+			//Присвоение общенных рангов
+			double[] resultArray = new double[colums];
+			for (int j = 0; j < colums; j++)
+			{
+				for (int k = 0; k < colums; k++)
+				{
+					if (sumArray[k] == sumAuxiliaryArray[j])
+					{
+						resultArray[k] = generalizedRank[j];
 					}
 				}
 			}
 
-			//Поиск совпадений элементов в столбце
-			//double[] generalizedRank = new double[colums];
-			//int count = 0;
-			//int index = 0;
-			//for (int j = 0; j < colums; j++)
-			//{
-			//	foreach (var elenemt in sumArray)
-			//	{
-			//		if (elenemt == sumArray[j])
-			//		{
-			//			count++;
-			//			if (count > numberMostExperts)
-			//			{
-			//				generalizedRank[j];
-			//			}
-			//		}
-			//	}
-			//}
-			
-
-
-			////Среднее значение суммы элементов столбцы
-			//for (int i = 0; i < colums; i++)
-			//{
-			//	if (generalizedRank[i] == 0)
-			//	{ 
-			//		generalizedRank[i] = sum[i] / rows;
-			//	}
-			//}
-
 			Console.WriteLine("Обобщенный ранг");
-			DisplayArray(generalizedRank);
-			DisplayArray(sumAuxiliaryArray);
+			DisplayArray(resultArray);
 		}
 
 		static void PairComparison(double[,] matrix)
