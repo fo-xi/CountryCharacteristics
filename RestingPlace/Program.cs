@@ -160,14 +160,14 @@ namespace RestingPlace
 
 			//Поиск совпадений элементов в столбце
 			double[] generalizedRank = new double[colums];
-			for (int i = 0; i < colums; i++)
+			for (int i = 0; i < rows; i++)
 			{
-				for (int j = 0; j < rows; j++)
+				for (int j = 0; j < colums; j++)
 				{
 					int count = 0;
-					for (int k = 0; k < rows; k++)
+					for (int k = 0; k < colums; k++)
 					{
-						if (matrix[k, i] == matrix[j, i])
+						if (matrix[i, k] == matrix[i, j])
 						{
 							count++;
 							if (count >= numberMostExperts)
@@ -441,38 +441,27 @@ namespace RestingPlace
         {
 			double[] resultArray = new double[sizeChoosingVacationSpot];
 
-			//Шкалы отношений
-			double maxValueArray1 = array1.Max();
-			double maxValueArray2 = array2.Max();
+			double max = 1.0;
 
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < sizeChoosingVacationSpot; i++)
 			{
-				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((maxValueArray1 - array1[i]), 2)) +
-					(Math.Pow((maxValueArray2 - array2[i]), 2))) 
+				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((max - array1[i]), 2)) +
+					(Math.Pow((max - array2[i]), 2)) +
+					(Math.Pow((max - array3[i]), 2)) +
+					(Math.Pow((max - array4[i]), 2))) 
 					/ sizeChoosingVacationSpot, 1.0 / 2)), 3);
-			}
-			//Ранговые шкалы
-			for (int i = 2; i < 4; i++)
-			{
-				resultArray[i] = Math.Round((Math.Pow(((Math.Pow((1 - array3[i]), 2)) +
-					(Math.Pow((1 - array4[i]), 2))), 1.0 / 2)) / sizeChoosingVacationSpot, 3);
 			}
 			Console.WriteLine("Значения интегрального критерия " +
 				"по методу идеальной точки");
 			DisplayArray(resultArray, sizeChoosingVacationSpot);
 
 			double[] resultArrayWeight = new double[sizeChoosingVacationSpot];
-			//Шкалы отношений
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < sizeChoosingVacationSpot; i++)
 			{
-				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((maxValueArray1 - array1[i]), 2))) +
-					(weight[i] * (Math.Pow((maxValueArray2 - array2[i]), 2)))), 1.0 / 2), 3);
-			}
-			//Ранговые шкалы
-			for (int i = 2; i < 4; i++)
-			{
-				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((1 - array3[i]), 2))) +
-					(weight[i] * (Math.Pow((1 - array4[i]), 2)))), 1.0 / 2), 3);
+				resultArrayWeight[i] = Math.Round(Math.Pow(((weight[i] * (Math.Pow((max - array1[i]), 2))) +
+					(weight[i] * (Math.Pow((max - array2[i]), 2))) +
+					(weight[i] * (Math.Pow((max - array3[i]), 2))) +
+					(weight[i] * (Math.Pow((max - array4[i]), 2)))), 1.0 / 2), 3);
 			}
 			Console.WriteLine("Значения интегрального критерия " +
 				"по методу идеальной точки (вес)");
