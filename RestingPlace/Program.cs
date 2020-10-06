@@ -68,18 +68,23 @@ namespace RestingPlace
 				0.3, 0.3, 0.2, 0.2
 			};
 
-			Console.WriteLine("Ранживароние");
+			Console.WriteLine("Ранживароние: ");
 			Ranging(matrix1, comparativeArray);
 			Console.WriteLine();
-			Console.WriteLine("Парное сравнение");
+			Console.WriteLine("Парное сравнение: ");
 			PairComparison(matrix1, comparativeArray);
 			Console.WriteLine("===============================");
-			Console.WriteLine("Матрица ко второму заданию");
+			Console.WriteLine("Матрица ко второму заданию: ");
 			DisplayMatrix(matrix2);
+			Console.WriteLine("Компетентность экспертов: ");
+			DisplayArray(expertСompetence, expertСompetence.Length);
 			DirectAssessment(matrix2, expertСompetence);
 			Console.WriteLine("===============================");
-			Console.WriteLine("Матрица к третьему заданию");
+			Console.WriteLine("Матрица к третьему заданию: ");
 			DisplayMatrix(matrix3, sizeChoosingVacationSpot, sizeChoosingVacationSpot);
+			Console.WriteLine("Веса критериев: ");
+			DisplayArray(weight, weight.Length);
+			Console.WriteLine();
 			AssessingAlternatives(matrix3, weight);
 			Console.ReadKey();
 		}
@@ -459,12 +464,12 @@ namespace RestingPlace
 			double maxValue = resultArray.Max();
 			double indexMaxValue = Array.IndexOf(resultArray, maxValue);
 			Console.WriteLine($"Наилучшее значение по методу " +
-				$"аддитивной свертки оказалось место отдыха A{indexMaxValue + 1} = {maxValue}");
+				$"мультипликативной свертки оказалось место отдыха A{indexMaxValue + 1} = {maxValue}");
 
 			maxValue = resultArrayWeight.Max();
 			indexMaxValue = Array.IndexOf(resultArrayWeight, maxValue);
 			Console.WriteLine($"Наилучшее значение по методу " +
-				$"аддитивной свертки (с учетом веса) оказалось " +
+				$"мультипликативной свертки (с учетом веса) оказалось " +
 				$"место отдыха A{indexMaxValue + 1} = {maxValue}");
 			Console.WriteLine();
 		}
@@ -516,12 +521,12 @@ namespace RestingPlace
 			double maxValue = resultArray.Max();
 			double indexMaxValue = Array.IndexOf(resultArray, maxValue);
 			Console.WriteLine($"Наилучшее значение по методу " +
-				$"аддитивной свертки оказалось место отдыха A{indexMaxValue + 1} = {maxValue}");
+				$"идеальной точки оказалось место отдыха A{indexMaxValue + 1} = {maxValue}");
 
 			maxValue = resultArrayWeight.Max();
 			indexMaxValue = Array.IndexOf(resultArrayWeight, maxValue);
 			Console.WriteLine($"Наилучшее значение по методу " +
-				$"аддитивной свертки (с учетом веса) оказалось " +
+				$"идеальной точки (с учетом веса) оказалось " +
 				$"место отдыха A{indexMaxValue + 1} = {maxValue}");
 			Console.WriteLine();
 		}
