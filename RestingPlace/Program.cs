@@ -26,18 +26,14 @@ namespace RestingPlace
 		static void Main(string[] args)
 		{
 			//1 задание
-			string[] comparativeArray =
-			{
-				"A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"
-			};
 
-			string[,] matrix1 =
+			double[,] matrix1 =
 			{
-				{"A7", "A4", "A8", "A2", "A6", "A10", "A9", "A3", "A1", "A5"},
-				{"A2", "A10", "A7", "A9", "A1", "A6", "A5", "A8", "A3", "A4"},
-				{"A6", "A5", "A2", "A7", "A8", "A9", "A10", "A1", "A3", "A4"},
-				{"A9", "A10", "A7", "A6", "A2", "A4", "A1", "A5", "A8", "A3"},
-				{"A6", "A9", "A10", "A4", "A8", "A7", "A5", "A3", "A2", "A1"}
+				{9, 4, 8, 2, 10, 5, 1, 3, 7, 6},
+				{5, 1, 9, 10, 7, 6, 3, 8, 4, 2},
+				{8, 3, 9, 10, 2, 1, 4, 5, 6, 7},
+				{7, 5, 10, 6, 8, 4, 3, 9, 1, 2},
+				{10, 9, 8, 4, 7, 1, 6, 5, 2, 3}
 			};
 
 			//2 задание
@@ -69,10 +65,11 @@ namespace RestingPlace
 			};
 
 			Console.WriteLine("Ранживароние: ");
-			Ranging(matrix1, comparativeArray);
+			DisplayMatrix(matrix1);
+			Ranging(matrix1);
 			Console.WriteLine();
 			Console.WriteLine("Парное сравнение: ");
-			PairComparison(matrix1, comparativeArray);
+			PairComparison(matrix1);
 			Console.WriteLine("===============================");
 			Console.WriteLine("Матрица ко второму заданию: ");
 			DisplayMatrix(matrix2);
@@ -147,33 +144,15 @@ namespace RestingPlace
 			return arrayString;
 		}
 
-		static void Ranging(string[,] matrix, string[] comparativeArray)
+		static void Ranging(double[,] matrix)
 		{
-			//Перевод из матрицы типа string в матрицу типа double
-			double[,] resultMatrix = new double[rows, colums];
-			for (int i = 0; i < rows; i++)
-			{
-				for (int index = 0; index < comparativeArray.Length; index++)
-				{
-					for (int j = 0; j < colums; j++)
-					{
-						if (matrix[i, j] == comparativeArray[index])
-						{
-							resultMatrix[i, index] = j + 1;
-						}
-					}
-				}
-			}
-
-			DisplayMatrix(resultMatrix);
-
 			//Сумма элемнтов столбца
 			double[] sum = new double[colums];
 			for (int i = 0; i < colums; i++)
 			{
 				for (int j = 0; j < rows; j++)
 				{
-					sum[i] = sum[i] + resultMatrix[j, i];
+					sum[i] = sum[i] + matrix[j, i];
 				}
 			}
 			Console.WriteLine("Сумма рангов");
@@ -188,12 +167,12 @@ namespace RestingPlace
 					int count = 0;
 					for (int k = 0; k < rows; k++)
 					{
-						if (resultMatrix[k, i] == resultMatrix[j, i])
+						if (matrix[k, i] == matrix[j, i])
 						{
 							count++;
 							if (count >= numberMostExperts)
 							{
-								generalizedRank[i] = resultMatrix[k, i];
+								generalizedRank[i] = matrix[k, i];
 
 							}
 						}
@@ -214,25 +193,8 @@ namespace RestingPlace
 			DisplayArray(generalizedRank);
 		}
 
-		static void PairComparison(string[,] matrix, string[] comparativeArray)
+		static void PairComparison(double[,] matrix)
 		{
-
-			//Перевод из матрицы типа string в матрицу типа double
-			double[,] doubleMatrix = new double[rows, colums];
-			for (int i = 0; i < rows; i++)
-			{
-				for (int index = 0; index < comparativeArray.Length; index++)
-				{
-					for (int j = 0; j < colums; j++)
-					{
-						if (matrix[i, j] == comparativeArray[index])
-						{
-							doubleMatrix[i, index] = j + 1;
-						}
-					}
-				}
-			}
-
 			//Список матриц
 			List<int[,]> matrixList = new List<int[,]>();
 
@@ -240,7 +202,7 @@ namespace RestingPlace
 			for (int i = 0; i < rows; i++)
 			{
 				int[,] resultMatrix = new int[colums, colums];
-				double[] arrayDouble = GetRow(doubleMatrix, i);
+				double[] arrayDouble = GetRow(matrix, i);
 				for (int j = 0; j < colums; j++)
 				{
 					for (int k = 0; k < colums; k++)
